@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cadastro de Produtos - Karol Milly</title>
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      h1,
+      h2 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-weight: bold;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        padding: 10px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f0f0f0;
+      }
+
+      #resultadoBusca {
+        margin-top: 15px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      @media (max-width: 600px) {
+        .form-group {
+          flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div style="background-color: #2c3e50; padding: 15px; display: flex; align-items: center; justify-content: space-between;">
+      <h1 style="color: #ecf0f1; margin: 0;">📦 Gerenciador de Estoque</h1>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="irParaVendas()" style="background-color: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">
+          🛍️ Vendas
+        </button>
+        <button onclick="irParaRelatorios()" style="background-color: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">
+          📊 Relatórios
+        </button>
+        <button onclick="logout()">Sair</button>
+      </div>
+    </div>
+    
+    </div>
+
+    <script>
+      function irParaRelatorio() {
+        window.location.href = "relatorio.html";
+      }
+    </script>
+
+    <div class="">
+      <h2>Buscar Produto</h2>
+      <div class="form-group">
+        <input
+          type="text"
+          id="buscaNome"
+          placeholder="Digite o nome do produto"
+        />
+        <button onclick="buscarProduto()">Buscar Produto</button>
+      </div>
+
+      <div id="resultadoBusca"></div>
+    </div>
+    <h1>Cadastro de Produtos</h1>
+
+    <div class="form-group">
+      <div>
+        <label for="nome">Nome do Produto:</label><br />
+        <input type="text" id="nome" />
+      </div>
+
+      <div>
+        <label for="preco">Preço:</label><br />
+        <input type="number" id="preco" step="0.01" />
+      </div>
+
+      <div>
+        <label for="estoque">Estoque:</label><br />
+        <input type="number" id="estoque" />
+      </div>
+
+      <div style="align-self: flex-end">
+        <button onclick="cadastrarProduto()">Cadastrar Produto</button>
+      </div>
+    </div>
+
+    <h2>Lista de Produtos</h2>
+    <button onclick="carregarProdutos()">Atualizar Lista</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Preço</th>
+          <th>Estoque</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaProdutos">
+        <!-- Produtos serão inseridos aqui -->
+      </tbody>
+    </table>
+
+    <script>
+     
+
+
+    function logout() {
+        localStorage.removeItem("usuario_logado");
+        window.location.href = "cadastro.html";
+    }
+
+       const usuario = localStorage.getItem("usuario_logado");
+    if (!usuario) {
+        alert("⚠️ Você precisa fazer login para acessar o sistema.");
+        window.location.href = "cadastro.html";
+    }
+
+
+      const API_URL = "http://192.168.18.14:5000";
+
+      async function cadastrarProduto() {
+        const nome = document.getElementById("nome").value;
+        const preco = parseFloat(document.getElementById("preco").value);
+        const estoque = parseInt(document.getElementById("estoque").value);
+
+        if (!nome || isNaN(preco) || isNaN(estoque)) {
+          alert("Preencha todos os campos corretamente.");
+          return;
+        }
+
+        const produto = { nome, preco, estoque };
+
+        try {
+          const response = await fetch(`${API_URL}/produtos`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(produto),
+          });
+
+          if (!response.ok) throw new Error("Erro ao cadastrar produto");
+
+          alert("Produto cadastrado com sucesso!");
+          document.getElementById("nome").value = "";
+          document.getElementById("preco").value = "";
+          document.getElementById("estoque").value = "";
+          carregarProdutos();
+        } catch (error) {
+          console.error("Erro ao cadastrar:", error);
+          alert("Erro ao cadastrar produto.");
+        }
+      }
+
+      function carregarProdutos() {
+        fetch(`${API_URL}/produtos`)
+          .then((response) => response.json())
+          .then((produtos) => {
+            const tabela = document.getElementById("tabelaProdutos");
+            tabela.innerHTML = "";
+
+            produtos.forEach((produto) => {
+              const row = tabela.insertRow();
+              row.insertCell(0).textContent = produto.id;
+              row.insertCell(1).textContent = produto.nome;
+              row.insertCell(2).textContent = `R$ ${parseFloat(
+                produto.preco
+              ).toFixed(2)}`;
+              row.insertCell(3).textContent = produto.estoque;
+            });
+          })
+          .catch((error) => {
+            console.error("Erro ao carregar produtos:", error);
+          });
+      }
+
+      async function buscarProduto() {
+        const nome = document.getElementById("buscaNome").value.trim();
+
+        if (!nome) {
+          alert("Digite o nome do produto para buscar.");
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `${API_URL}/produtos/nome/${encodeURIComponent(nome)}`
+          );
+          if (!response.ok) throw new Error("Produto não encontrado.");
+
+          const produto = await response.json();
+          document.getElementById(
+            "resultadoBusca"
+          ).innerText = `Produto encontrado: "${produto.nome}" - Quantidade em estoque: ${produto.estoque}`;
+        } catch (error) {
+          document.getElementById("resultadoBusca").innerText =
+            "Produto não encontrado ou erro na busca.";
+        }
+      }
+
+      function irParaRelatorios() {
+        window.location.href = "relatorio.html";
+      }
+      function irParaVendas() {
+    window.location.href = 'vendas.html';
+  }
+
+  
+
+      //   document.addEventListener("DOMContentLoaded", carregarProdutos);
+    </script>
+  </body>
+</html>

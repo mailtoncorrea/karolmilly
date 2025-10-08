@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <title>Gestão de Vendas - Karol Milly</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background-color: #ecf0f1;
+        color: #2c3e50;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      header h1 {
+        font-size: 1.5rem;
+      }
+
+      header button {
+        background-color: #3498db;
+        border: none;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.2s;
+      }
+
+      header button:hover {
+        opacity: 0.9;
+      }
+
+      header .btn-green {
+        background-color: #27ae60;
+      }
+
+      main {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      section {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      section h2 {
+        margin-bottom: 15px;
+        color: #34495e;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 5px;
+      }
+
+      input,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+
+      button {
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .btn-add {
+        background-color: #23b8e8;
+        color: white;
+      }
+
+      .btn-search {
+        background-color: #a2a6f7;
+        color: white;
+      }
+
+      .btn-add:hover,
+      .btn-search:hover {
+        opacity: 0.9;
+      }
+
+      ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      li {
+        background-color: #f8f9fa;
+        padding: 8px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        border: 1px solid #ddd;
+      }
+
+      footer {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        text-align: center;
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 900px) {
+        main {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>🛍️ Gerenciador de Vendas</h1>
+      <div style="display: flex; gap: 10px">
+        <button onclick="irParaEstoque()">📦 Estoque</button>
+        <button class="btn-green" onclick="irParaRelatorios()">
+          📊 Relatórios
+        </button>
+        <button style="background: #e74c3c" onclick="logout()">🚪 Sair</button>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <h2>Cadastro de Clientes</h2>
+        <input type="text" id="clienteNome" placeholder="Nome do Cliente" />
+        <input type="text" id="telefone" placeholder="(99) 99999-9999" />
+        <button class="btn-add" onclick="adicionarCliente()">
+          ➕ Adicionar Cliente
+        </button>
+        <button class="btn-search" onclick="buscarCliente()">
+          🔍 Buscar Cliente
+        </button>
+
+        <input
+          type="number"
+          id="valorPagamento"
+          placeholder="Valor do Pagamento"
+        />
+        <button class="btn-add" onclick="realizarPagamento()">
+          💰 Realizar Pagamento
+        </button>
+      </section>
+
+      <section>
+        <h2>Registrar Compra</h2>
+        <input type="text" id="compraCliente" placeholder="Nome do Cliente" />
+        <input type="text" id="compraProduto" placeholder="Nome do Produto" />
+        <input type="number" id="compraQtd" placeholder="Quantidade" />
+        <input type="number" id="valorPago" placeholder="Valor Pago" />
+        <button class="btn-add" onclick="registrarCompra()">
+          🧾 Registrar Compra
+        </button>
+
+        <h2>Histórico de Transações</h2>
+        <input
+          type="text"
+          id="buscarTransacaoNome"
+          placeholder="Nome do Cliente"
+        />
+        <button class="btn-search" onclick="buscarTransacoes()">
+          🔍 Ver Transações
+        </button>
+        <ul id="transacaoLista"></ul>
+
+        <button
+          style="background-color: #3498db; color: white; margin-top: 15px"
+          onclick="window.location.href='produtos.html'"
+        >
+          🛒 Ir para Produtos
+        </button>
+      </section>
+    </main>
+
+    <footer>Sistema Karol Milly © 2025 — Todos os direitos reservados</footer>
+
+    <script>
+      function logout() {
+        localStorage.removeItem("usuario_logado");
+        window.location.href = "cadastro.html";
+      }
+
+      function realizarPagamento() {
+        const nome = document.getElementById("clienteNome").value.trim();
+        const valor = parseFloat(
+          document.getElementById("valorPagamento").value
+        );
+
+        if (!nome || isNaN(valor) || valor <= 0) {
+          alert("Informe o nome do cliente e um valor de pagamento válido.");
+          return;
+        }
+
+        fetch("http://192.168.18.14:5000/pagamentos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nome_cliente: nome, valor_pago: valor }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.erro) {
+              alert("❌ " + data.erro);
+            } else {
+              alert("✅ " + data.mensagem);
+              document.getElementById("valorPagamento").value = "";
+            }
+          })
+          .catch((erro) => console.error("Erro ao registrar pagamento:", erro));
+      }
+
+      function buscarCliente() {
+        let nomeCliente = document
+          .getElementById("clienteNome")
+          .value.trim()
+          .toLowerCase();
+
+        if (!nomeCliente) {
+          alert("Digite um nome para buscar!");
+          return;
+        }
+
+        fetch(
+          `http://192.168.18.14:5000/clientes/buscar?nome=${encodeURIComponent(
+            nomeCliente
+          )}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.erro) {
+              alert("❌ " + data.erro);
+            } else {
+              alert(
+                `✅ Cliente encontrado:\nNome: ${data.nome}\nTelefone: ${data.telefone}\nSaldo devedor: ${data.saldo_devedor}`
+              );
+            }
+          })
+          .catch((error) => console.error("Erro ao buscar cliente:", error));
+      }
+
+      async function buscarTransacoes() {
+        try {
+          const nomeCliente = document
+            .getElementById("buscarTransacaoNome")
+            .value.trim();
+          if (!nomeCliente) {
+            alert("Digite um nome para buscar transações.");
+            return;
+          }
+
+          const lista = document.getElementById("transacaoLista");
+          lista.innerHTML = "";
+
+          const resposta = await fetch(
+            `http://192.168.18.14:5000/transacoes?nome=${encodeURIComponent(
+              nomeCliente
+            )}`
+          );
+          const transacoes = await resposta.json();
+
+          if (!Array.isArray(transacoes)) {
+            console.error("Erro: Resposta inesperada da API", transacoes);
+            return;
+          }
+
+          transacoes.forEach((t) => {
+            if (
+              !t.produto ||
+              !t.quantidade ||
+              t.valor_total === undefined ||
+              t.valor_pago === undefined
+            ) {
+              return;
+            }
+
+            let valorTotal = parseFloat(t.valor_total) || 0;
+            let valorPago = parseFloat(t.valor_pago) || 0;
+            let troco = valorPago - valorTotal;
+
+            const item = document.createElement("li");
+            item.textContent = `${t.data} - ${t.produto} - Qtd: ${
+              t.quantidade
+            } - R$ ${valorTotal.toFixed(2)} - Pago: R$ ${valorPago.toFixed(
+              2
+            )} - Troco: R$ ${troco.toFixed(2)}`;
+            lista.appendChild(item);
+          });
+        } catch (erro) {
+          console.error("Erro ao buscar transações:", erro);
+        }
+      }
+
+      function adicionarCliente() {
+        let nomeInput = document.getElementById("clienteNome");
+        let telefoneInput = document.getElementById("telefone");
+
+        if (!nomeInput) return;
+
+        let nome = nomeInput.value.trim();
+        let telefone = telefoneInput ? telefoneInput.value.trim() : "";
+
+        if (nome === "") {
+          alert("O nome do cliente é obrigatório.");
+          return;
+        }
+
+        let dados = { nome: nome };
+        if (telefone !== "") dados.telefone = telefone;
+
+        fetch("http://192.168.18.14:5000/clientes/cadastrar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dados),
+        })
+          .then(async (response) => {
+            const data = await response.json();
+
+            if (!response.ok) {
+              alert("❌ " + (data?.mensagem || data?.erro));
+              return;
+            }
+
+            alert(
+              "✅ " + (data?.mensagem || "Cliente cadastrado com sucesso!")
+            );
+            nomeInput.value = "";
+            if (telefoneInput) telefoneInput.value = "";
+          })
+          .catch((error) => {
+            console.error("Erro ao cadastrar cliente:", error);
+            alert("❌ Erro inesperado ao cadastrar cliente.");
+          });
+      }
+
+      function registrarCompra() {
+        let clienteNome = document.getElementById("compraCliente").value.trim();
+        let produtoNome = document.getElementById("compraProduto").value.trim();
+        let quantidade = document.getElementById("compraQtd").value;
+        let valorPago = document.getElementById("valorPago").value;
+
+        if (!clienteNome || !produtoNome || !quantidade) {
+          alert("Preencha todos os campos obrigatórios!");
+          return;
+        }
+
+        let dadosCompra = {
+          cliente_nome: clienteNome,
+          produto_nome: produtoNome,
+          quantidade: parseInt(quantidade),
+          valor_pago: parseFloat(valorPago) || 0,
+        };
+
+        fetch("http://192.168.18.14:5000/vendas", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dadosCompra),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.erro) {
+              alert("❌ Erro: " + data.erro);
+            } else {
+              alert("✅ Compra registrada com sucesso!");
+              location.reload();
+            }
+          })
+          .catch((error) => console.error("Erro ao registrar compra:", error));
+      }
+
+      function irParaEstoque() {
+        window.location.href = "estoque.html";
+      }
+
+      function irParaRelatorios() {
+        window.location.href = "relatorio.html";
+      }
+    </script>
+  </body>
+</html>
