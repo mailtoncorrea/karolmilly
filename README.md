@@ -54,16 +54,34 @@ KarolMilly/
 │       ├── vendas.py
 │       └── pagamentos.py
 └── frontend/
+    └── static/
+        ├── css/
+            ├── cadastro.css
+            ├── estoque.css
+            ├── login.css
+            ├── relatorio.css
+            ├── vendas.css
+            └── produtos.css
+        ├── js/
+            ├── cadastro.js
+            ├── estoque.js
+            ├── login.js
+            ├── relatorio.js
+            ├── vendas.js
+            └── produtos.js
     ├── vendas.html
     ├── produtos.html
-    └── js/
-        ├── vendas.js
-        └── produtos.js
+    ├── cadastro.html
+    ├── estoque.html
+    ├── login.html
+    ├── relatorios.html
+
 ```
 
 ---
 
 ## 👨‍💻 Autor
 
-**Desenvolvido por:** Mailton  
+**Desenvolvido por:** Mailton Correa
+**Telefone:** (91) 98499-0954
 📧 **Contato:** benicorrea2@gmail.com

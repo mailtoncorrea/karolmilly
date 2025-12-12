@@ -1,0 +1,79 @@
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #f8b6c1, #f7e0b5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 24px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #e48ba5;
+  box-shadow: 0 0 5px rgba(228, 139, 165, 0.4);
+}
+
+button {
+  background-color: #e48ba5;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #d66b8b;
+}
+
+.toggle {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.mensagem {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #d44;
+  height: 20px;
+}
