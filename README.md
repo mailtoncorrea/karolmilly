@@ -82,6 +82,6 @@ KarolMilly/
 
 ## 👨‍💻 Autor
 
-**Desenvolvido por:** Mailton Correa
-**Telefone:** (91) 98499-0954
-📧 **Contato:** benicorrea2@gmail.com
+- **Desenvolvido por:** Mailton Correa
+- **Telefone:** (91) 98499-0954
+- 📧 **Contato:** benicorrea2@gmail.com
