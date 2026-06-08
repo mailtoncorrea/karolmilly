@@ -12,7 +12,7 @@ function realizarPagamento() {
     return;
   }
 
-  fetch("http://192.168.18.14:5000/pagamentos", {
+  fetch("http://localhost:5000/pagamentos", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ nome_cliente: nome, valor_pago: valor }),
@@ -41,9 +41,9 @@ function buscarCliente() {
   }
 
   fetch(
-    `http://192.168.18.14:5000/clientes/buscar?nome=${encodeURIComponent(
-      nomeCliente
-    )}`
+    `http://localhost:5000/clientes/buscar?nome=${encodeURIComponent(
+      nomeCliente,
+    )}`,
   )
     .then((response) => response.json())
     .then((data) => {
@@ -51,7 +51,7 @@ function buscarCliente() {
         alert("❌ " + data.erro);
       } else {
         alert(
-          `✅ Cliente encontrado:\nNome: ${data.nome}\nTelefone: ${data.telefone}\nSaldo devedor: ${data.saldo_devedor}`
+          `✅ Cliente encontrado:\nNome: ${data.nome}\nTelefone: ${data.telefone}\nSaldo devedor: ${data.saldo_devedor}`,
         );
       }
     })
@@ -72,9 +72,9 @@ async function buscarTransacoes() {
     lista.innerHTML = "";
 
     const resposta = await fetch(
-      `http://192.168.18.14:5000/transacoes?nome=${encodeURIComponent(
-        nomeCliente
-      )}`
+      `http://localhost:5000/transacoes?nome=${encodeURIComponent(
+        nomeCliente,
+      )}`,
     );
     const transacoes = await resposta.json();
 
@@ -101,7 +101,7 @@ async function buscarTransacoes() {
       item.textContent = `${t.data} - ${t.produto} - Qtd: ${
         t.quantidade
       } - R$ ${valorTotal.toFixed(2)} - Pago: R$ ${valorPago.toFixed(
-        2
+        2,
       )} - Troco: R$ ${troco.toFixed(2)}`;
       lista.appendChild(item);
     });
@@ -127,7 +127,7 @@ function adicionarCliente() {
   let dados = { nome: nome };
   if (telefone !== "") dados.telefone = telefone;
 
-  fetch("http://192.168.18.14:5000/clientes/cadastrar", {
+  fetch("http://localhost:5000/clientes/cadastrar", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(dados),
@@ -168,7 +168,7 @@ function registrarCompra() {
     valor_pago: parseFloat(valorPago) || 0,
   };
 
-  fetch("http://192.168.18.14:5000/vendas", {
+  fetch("http://localhost:5000/vendas", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(dadosCompra),

@@ -23,7 +23,7 @@ loginForm.addEventListener("submit", async function (e) {
   const usuario = document.getElementById("loginUsuario").value;
   const senha = document.getElementById("loginSenha").value;
 
-  const resposta = await fetch("http://192.168.18.14:5000/api/login", {
+  const resposta = await fetch("http://localhost:5000/api/login", {
     method: "POST",
     mode: "cors",
     headers: { "Content-Type": "application/json" },
@@ -57,7 +57,7 @@ cadastroForm.addEventListener("submit", async function (e) {
     return;
   }
 
-  const resposta = await fetch("http://192.168.18.14:5000/api/cadastrar", {
+  const resposta = await fetch("http://localhost:5000/api/cadastrar", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ nome, usuario, senha }),

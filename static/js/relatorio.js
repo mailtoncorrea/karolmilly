@@ -23,7 +23,7 @@ async function buscarTransacoes() {
 
   try {
     const response = await fetch(
-      `http://192.168.18.14:5000/transacoes?nome=${encodeURIComponent(nome)}`
+      `http://localhost:5000/transacoes?nome=${encodeURIComponent(nome)}`,
     );
     const dados = await response.json();
 

@@ -43,8 +43,8 @@ form.addEventListener("submit", async (e) => {
 
   try {
     const url = modoCadastro
-      ? "http://192.168.18.14:5000/api/cadastrar"
-      : "http://192.168.18.14:5000/api/login";
+      ? "http://localhost:5000/api/cadastrar"
+      : "http://localhost:5000/api/login";
 
     const body = modoCadastro
       ? JSON.stringify({ nome, usuario, senha })

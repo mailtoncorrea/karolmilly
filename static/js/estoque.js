@@ -9,7 +9,7 @@ if (!usuario) {
   window.location.href = "cadastro.html";
 }
 
-const API_URL = "http://192.168.18.14:5000";
+const API_URL = "http://localhost:5000";
 
 async function cadastrarProduto() {
   const nome = document.getElementById("nome").value;
@@ -55,7 +55,7 @@ function carregarProdutos() {
         row.insertCell(0).textContent = produto.id;
         row.insertCell(1).textContent = produto.nome;
         row.insertCell(2).textContent = `R$ ${parseFloat(produto.preco).toFixed(
-          2
+          2,
         )}`;
         row.insertCell(3).textContent = produto.estoque;
       });
@@ -75,14 +75,13 @@ async function buscarProduto() {
 
   try {
     const response = await fetch(
-      `${API_URL}/produtos/nome/${encodeURIComponent(nome)}`
+      `${API_URL}/produtos/nome/${encodeURIComponent(nome)}`,
     );
     if (!response.ok) throw new Error("Produto não encontrado.");
 
     const produto = await response.json();
-    document.getElementById(
-      "resultadoBusca"
-    ).innerText = `Produto encontrado: "${produto.nome}" - Quantidade em estoque: ${produto.estoque}`;
+    document.getElementById("resultadoBusca").innerText =
+      `Produto encontrado: "${produto.nome}" - Quantidade em estoque: ${produto.estoque}`;
   } catch (error) {
     document.getElementById("resultadoBusca").innerText =
       "Produto não encontrado ou erro na busca.";

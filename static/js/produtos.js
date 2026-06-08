@@ -4,7 +4,7 @@ if (!usuario) {
   window.location.href = "cadastro.html";
 }
 
-const API_URL = "http://192.168.18.14:5000"; // URL da API
+const API_URL = "http://localhost:5000"; // URL da API
 
 // Função para carregar produtos do banco de dados via API
 function carregarProdutos() {
@@ -35,7 +35,7 @@ function listarProdutos(produtos) {
 
     const item = document.createElement("li");
     item.textContent = `${produto.nome} - R$ ${produto.preco.toFixed(
-      2
+      2,
     )} - Estoque: ${produto.estoque}`;
     lista.appendChild(item);
   });
@@ -62,7 +62,7 @@ function adicionarProduto() {
     estoque: estoqueProduto,
   };
 
-  fetch("http://192.168.18.14:5000/produtos", {
+  fetch("http://localhost:5000/produtos", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(dadosProduto),
